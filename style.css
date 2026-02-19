@@ -1,0 +1,167 @@
+ body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-image: url("images/hqdefault.jpg");
+            background-size: cover; 
+            margin: 0;
+            padding: 20px;
+        }
+
+        .title {
+            display: flex;
+            width: 980px;
+            height: 100px;
+            background: #015b45;
+            color: white;
+            border-radius: 8px;
+            padding: 10px;
+            margin: 10px auto;
+        }
+
+        .title img {
+            width: 13%;
+            height: auto;
+        }
+
+        .title h1 {
+            color:transparent;
+            background-image:url(https://cdn1.ozone.ru/s3/multimedia-d/6703123153.jpg);
+            -webkit-background-clip: text;
+            font-family: 'Brush Script MT', cursive;
+            text-align: center;
+            font-size: 90px;
+            align-items: center;
+            margin: auto;
+            border: 10px solid #3498db00;
+        }
+        .settings{
+            cursor: pointer;
+            
+        }
+        .settings:hover {
+            color: #34495e;
+        }
+
+        .status-bar {
+            background: #333;
+            color: white;
+            padding: 5px 10px;
+            text-align: right;
+            font-size: 14px;
+        }
+        #connection-status {
+            font-weight: bold;
+            color: #e74c3c;
+        }
+
+        .container {
+            display: flex;
+            max-width: 1000px;
+            margin: 0 auto;
+            gap: 15px;
+        }
+
+        .contacts {
+            width: 200px;
+            background: #007056;
+            color: white;
+            border-radius: 8px;
+            padding: 10px;
+            height: 600px;
+        }
+
+        .contacts h3 {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .contact {
+            padding: 10px;
+            border-bottom: 1px solid #34495e;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .contact:hover {
+            background: #34495e;
+        }
+
+        .contact.online::before {
+            content: "●";
+            color: #2ecc71;
+            margin-right: 8px;
+        }
+
+        /* Окно чата */
+        .chat {
+            flex: 1;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            background: #00d970;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px 8px 0 0;
+            font-weight: bold;
+        }
+
+        .messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background: #f9f9f9;
+            height: 400px;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 18px;
+            max-width: 70%;
+            word-wrap: break-word;
+        }
+
+        .message.own {
+            background: #3498db;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.their {
+            background: #e5e5ea;
+            color: black;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        .input-area {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ddd;
+        }
+
+        #message-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+
+        button {
+            padding: 10px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #2980b9;
+        }
