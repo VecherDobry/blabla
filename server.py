@@ -1,4 +1,4 @@
-from flask import Flask, send_file, send_from_directory
+from flask import Flask, send_file, send_from_directory, request  # Добавлен request
 from flask_socketio import SocketIO, emit
 import os
 import eventlet
@@ -35,7 +35,7 @@ def handle_disconnect():
         # Удаляем пользователя
         del users[request.sid]
         # Отправляем обновленный список пользователей всем
-        emit('users_update', [{'id': sid, 'name': data['name'], 'status': data['status']} 
+        emit('users_update', [{'id': sid, 'name': data['name'], 'status': 'offline'} 
                               for sid, data in users.items()], broadcast=True)
 
 @socketio.on('register_user')
@@ -78,12 +78,14 @@ def handle_message(data):
         messages.pop(0)
     
     # Отправляем сообщение конкретному получателю или всем
-    if data.get('recipient') and data['recipient'] != 'всем':
+    if data.get('recipient') and data['recipient'] != 'всем' and data.get('recipientId') and data['recipientId'] != 'всем':
         # Отправляем личное сообщение
         recipient_id = data.get('recipientId')
         if recipient_id:
+            # Отправляем получателю
             emit('message', data, room=recipient_id)
-        emit('message', data, room=request.sid)  # Отправляем копию отправителю
+            # Отправляем копию отправителю
+            emit('message', data, room=request.sid)
     else:
         # Отправляем всем (общий чат)
         emit('message', data, broadcast=True)
@@ -92,7 +94,7 @@ def handle_message(data):
 def handle_typing(data):
     """Обработка индикатора набора текста"""
     recipient_id = data.get('recipientId')
-    if recipient_id:
+    if recipient_id and recipient_id != 'всем':
         emit('typing', {
             'userId': request.sid,
             'username': users.get(request.sid, {}).get('name', 'Неизвестно'),
