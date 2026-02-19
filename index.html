@@ -5,12 +5,22 @@
     <title>Whats App2</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
-
 </head>
 <body>
-    
+
+<!-- Модальное окно для ввода имени -->
+<div id="nameModal" class="modal">
+    <div class="modal-content">
+        <h2>Добро пожаловать в WhatsApp2!</h2>
+        <p>Введите ваше имя:</p>
+        <input type="text" id="usernameInput" placeholder="Ваше имя" maxlength="30">
+        <button onclick="submitName()">Начать общение</button>
+    </div>
+</div>
+
 <div class="status-bar">
-    Статус: <span id="connection-status">Офлайн</span>
+    Статус: <span id="connection-status">Офлайн</span> | 
+    Пользователь: <span id="current-username">не задан</span>
 </div>
 
 <div class="title">
@@ -19,22 +29,24 @@
 </div>
 
 <div class="container">
-
     <div class="contacts">
-        <h3>Контакты</h3>
-        <div class="contact online" onclick="setRecipient('с собой')">себе</div>
+        <h3>Активные пользователи</h3>
+        <div id="users-list" class="users-list">
+            <!-- Список пользователей будет добавляться динамически -->
+        </div>
     </div>
 
     <div class="chat">
-        <div class="chat-header">Чат с <span id="recipient"></span></div>
+        <div class="chat-header">Чат с <span id="recipient">выберите пользователя</span></div>
         <div id="messages" class="messages"></div>
         <div class="input-area">
-            <input type="text" id="message-input" placeholder="Напишите сообщение..." onkeypress="handleEnter(event)">
-            <button onclick="sendMessage()">Отправить</button>
+            <input type="text" id="message-input" placeholder="Напишите сообщение..." onkeypress="handleEnter(event)" disabled>
+            <button onclick="sendMessage()" id="send-button" disabled>Отправить</button>
         </div>
     </div>
 </div>
 
 <script src="script.js"></script>
 </body>
+</html>
 </html>
