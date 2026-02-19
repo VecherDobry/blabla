@@ -72,6 +72,10 @@ socket.on('disconnect', function() {
         connectionStatus.style.color = '#e74c3c';
     }
     addSystemMessage('Отключено от сервера');
+    
+    // Блокируем ввод
+    if (messageInput) messageInput.disabled = true;
+    if (sendButton) sendButton.disabled = true;
 });
 
 socket.on('connect_error', function(error) {
@@ -125,8 +129,8 @@ socket.on('message', function(data) {
     }
     
     // Если сообщение личное и не для нас - игнорируем
-    if (data.recipientId && data.recipientId !== mySocketId && 
-        data.senderId !== mySocketId) {
+    if (data.recipientId && data.recipientId !== 'всем' && 
+        data.recipientId !== mySocketId && data.senderId !== mySocketId) {
         console.log('Сообщение не для нас, игнорируем');
         return;
     }
@@ -238,12 +242,18 @@ function selectUser(userId, userName) {
     if (typingIndicator) {
         typingIndicator.textContent = '';
     }
+    
+    console.log('Выбран пользователь:', userName, 'ID:', userId);
 }
 
 function enableChat() {
-    messageInput.disabled = false;
-    sendButton.disabled = false;
-    messageInput.focus();
+    if (messageInput) {
+        messageInput.disabled = false;
+        messageInput.focus();
+    }
+    if (sendButton) {
+        sendButton.disabled = false;
+    }
     
     // Выбираем общий чат по умолчанию
     selectUser('всем', 'Общий чат');
@@ -254,20 +264,22 @@ function handleEnter(event) {
         sendMessage();
     } else {
         // Отправляем индикатор набора текста
-        if (!typingTimeout) {
+        if (!typingTimeout && currentRecipientId && currentRecipientId !== 'всем') {
             socket.emit('typing', {
                 recipientId: currentRecipientId,
                 isTyping: true
             });
-        } else {
+        } else if (typingTimeout) {
             clearTimeout(typingTimeout);
         }
         
         typingTimeout = setTimeout(() => {
-            socket.emit('typing', {
-                recipientId: currentRecipientId,
-                isTyping: false
-            });
+            if (currentRecipientId && currentRecipientId !== 'всем') {
+                socket.emit('typing', {
+                    recipientId: currentRecipientId,
+                    isTyping: false
+                });
+            }
             typingTimeout = null;
         }, 1000);
     }
@@ -316,10 +328,12 @@ function sendMessage() {
     // Отправляем сигнал о прекращении набора текста
     if (typingTimeout) {
         clearTimeout(typingTimeout);
-        socket.emit('typing', {
-            recipientId: currentRecipientId,
-            isTyping: false
-        });
+        if (currentRecipientId && currentRecipientId !== 'всем') {
+            socket.emit('typing', {
+                recipientId: currentRecipientId,
+                isTyping: false
+            });
+        }
         typingTimeout = null;
     }
 }
